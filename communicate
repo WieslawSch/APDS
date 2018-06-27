@@ -1,0 +1,62 @@
+    <body bgcolor="#ffffff"><br>
+<?
+	$k = $_GET["k"];
+	$q = $_GET["q"];
+	if ($k == 0) $k = 1;
+	if ($q == 0) $q = 1;
+	$kk = $k;
+	$qq = $q;
+	include("db_open.php");
+	print "<form action=\"lala.php\" method=\"get\">";
+	print "<p align=\"center\">Anzeigen:";
+	print "&nbsp&nbspKatalog:&nbsp&nbsp";
+	print "<select name=\"k\">";
+	$sql = "SELECT * FROM Katalog";
+	$res = mysql_query($sql, $db);
+	while ($li = mysql_fetch_object ($res)) {
+		if ($kk == $li->kat_id)
+			{
+		print "<option selected value=\"$li->kat_id\">$li->katalog";
+			}
+		else {
+		print "<option value=\"$li->kat_id\">$li->katalog";
+			}
+		print "</option>";
+	}
+	print "</select>";
+	mysql_free_result ($res);
+	print "&nbsp&nbspQualifikation:&nbsp&nbsp";
+	print "<select name=\"q\">";
+	$sql = "SELECT * FROM Quali";
+	$res = mysql_query($sql, $db);
+	while ($li = mysql_fetch_object ($res)) {
+		if ($qq == $li->qua_id)
+			{
+		print "<option selected value=\"$li->qua_id\">$li->quali";
+			}
+		else {
+		print "<option value=\"$li->qua_id\">$li->quali";
+			}
+		print "</option>";
+	}
+	print "</select>";
+	mysql_free_result ($res);
+	print "&nbsp&nbsp<button type=\"submit\">";
+	print "Aktualisieren</button>";
+	print "</p></form>";
+?>
+<p align="center">Bearbeiten:&nbsp&nbsp<a href="upd_kat.php">Kataloge</a>&nbsp&nbsp&nbsp<a href="upd_qua.php">Qualifikation</a></p>
+<p align="center">Neu anlegen:&nbsp&nbsp<a href="new_kat.php">Kataloge</a>&nbsp&nbsp&nbsp<a href="new_qua.php">Qualifikation</a>&nbsp&nbsp&nbsp<a href="new_ask.php">Frage und Antwort</a></p><br>
+<?
+	include("db_open.php");
+	$sql = "SELECT * FROM Fragen WHERE akt_id=1";
+	if ($kk > 1) $sql = $sql." AND kata_id=$kk OR kata_id=1";
+	if ($qq > 1) $sql = $sql." AND qual_id=$qq OR qual_id=1";
+	$res = mysql_query($sql, $db);
+	while ($li = mysql_fetch_object ($res)) {
+		print"<p>$li->frage</p>";
+		print"<p>$li->antwort</p><br>";
+	}
+	mysql_free_result ($res);
+?>
+</body>
